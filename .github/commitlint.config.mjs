@@ -8,8 +8,8 @@ export default {
         '',
         'ci',
         'deps',
-        'ydb',
-        'ydb-container',
+        'assign',
+        'assign-container',
     ]],
     'subject-case': [RuleConfigSeverity.Error, 'never', []],
   }

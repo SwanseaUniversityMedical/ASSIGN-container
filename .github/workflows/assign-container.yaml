@@ -1,4 +1,4 @@
-name: YDB Container
+name: ASSIGN YDB Container
 
 on:
   pull_request:
@@ -6,16 +6,16 @@ on:
     branches-ignore: []
     # Only consider PRs that change files for this asset, including ci scripts
     paths:
-      - '.github/workflows/ydb-container.yaml'
-      - 'containers/ydb/**'
+      - '.github/workflows/assign-container.yaml'
+      - 'containers/assign/**'
   push:
     # Only release off of release and maintenance branches for this asset
     branches:
       - 'main'
     # Only consider pushes that change files for this asset, including ci scripts
     paths:
-      - '.github/workflows/ydb-container.yaml'
-      - 'containers/ydb/**'
+      - '.github/workflows/assign-container.yaml'
+      - 'containers/assign/**'
 
 permissions:
   contents: write
@@ -30,17 +30,17 @@ concurrency:
 jobs:
   # Job name must be unique across repo to target
   # branch protection rules "required checks" properly!
-  ydb-container:
+  assign-container:
     uses: SwanseaUniversityMedical/workflows/.github/workflows/pr-and-release-container.yaml@v2.0.3-containers
     with:
-      job-name: ydb-container
+      job-name: assign-container
       comment-pr: 'true'
       registry: ${{ vars.HARBOR_REGISTRY }}
       registry-user: ${{ vars.HARBOR_USER }}
-      registry-repo: dlm/ydb
-      release-tag-format: 'v${version}-ydb-container'
+      registry-repo: dlm/assign
+      release-tag-format: 'v${version}-assign-container'
       cosign-public-key: ${{ vars.COSIGN_PUBLIC_KEY }}
-      build-file: containers/ydb/Dockerfile
+      build-file: containers/assign/Dockerfile
       build-context: .
     secrets:
       cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY }}
