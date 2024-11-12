@@ -39,7 +39,7 @@ $ydb_dist/mupip set -NULL_SUBSCRIPTS=true -region DEFAULT && \
 $ydb_dist/mupip set -journal=off -region DEFAULT && \
 $ydb_dist/mupip set -extension_count=500000 -region DEFAULT && \
 $ydb_dist/mupip set -access_method=mm -region DEFAULT
-$ydb_dist/mupip extend DEFAULT -blocks=17000000
+$ydb_dist/mupip extend DEFAULT -blocks=1700
 
 #startup webgui
 yottadb -run %ydbgui --readwrite --port 9080 >>/data/logs/%ydbgui.log &
