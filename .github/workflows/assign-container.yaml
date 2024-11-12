@@ -37,7 +37,7 @@ jobs:
       comment-pr: 'true'
       registry: ${{ vars.HARBOR_REGISTRY }}
       registry-user: ${{ vars.HARBOR_USER }}
-      registry-repo: dlm/assign
+      registry-repo: ${{ vars.HARBOR_PROJECT }}/assign
       release-tag-format: 'v${version}-assign-container'
       cosign-public-key: ${{ vars.COSIGN_PUBLIC_KEY }}
       build-file: containers/assign/Dockerfile
