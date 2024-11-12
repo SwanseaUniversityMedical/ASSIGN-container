@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.source=https://github.com/SwanseaUniversityMedica
 USER root
 SHELL ["/bin/bash", "-c"]
 
-# Get git
+# Get git.
 RUN apt-get update && apt-get install -y git
 
 USER root
