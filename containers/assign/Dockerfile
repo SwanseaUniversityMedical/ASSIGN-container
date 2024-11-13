@@ -8,11 +8,7 @@ SHELL ["/bin/bash", "-c"]
 # Get git.
 RUN apt-get update && apt-get install -y git
 
-USER root
-SHELL ["/bin/bash", "-c"]
-
+# Add in startup script.
 ADD startup_scripts/assign-startup.sh /assign-startup.sh
 
 ENTRYPOINT ["/assign-startup.sh"]
-
-
