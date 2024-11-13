@@ -13,6 +13,7 @@
 mkdir -p /data/logs
 
 #set env vars
+export ydb_chset=M
 . /opt/yottadb/current/ydb_env_set
 
 #get ASSIGN
