@@ -16,6 +16,7 @@ ENV ydb_chset=M
 
 # Add in startup script.
 COPY startup_scripts/assign-startup.sh /assign-startup.sh
+RUN chmod +x /assign-startup.sh
 
 # Expose port for YottaDB GUI
 EXPOSE 9080/tcp
