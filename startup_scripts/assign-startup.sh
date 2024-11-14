@@ -7,7 +7,7 @@ mkdir -p /data/logs
 
 #get ASSIGN
 git clone $assign_url $assign_dest
-git -C $assign_dest checkout $sha
+git -C $assign_dest checkout $assign_sha
 cp $assign_dest/UPRN/yottadb/* $ydb_dir/$ydb_rel/r
 mkdir $abp_dir
 cp $assign_dest/UPRN/codelists/* $abp_dir
