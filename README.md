@@ -43,3 +43,10 @@ Are you sure you wish to proceeed !!?y
 ```
 
 This should then process ABP and ingest it into the appropriate globals for the ASSIGN routines to query.
+
+## What deployment looks like
+A docker container running the yottaDB spun up. 
+Then responsible dev shells into container to import the ABP as above. 
+This container runs a web service listening for a TCP request. This request then uses the underlying mumps routine to query ASSIGN and provide the JSON response.
+
+Set up a container with a simple web server which allows a user to log in and make a request over TCP, this allows us to control routes of access via network rules.
