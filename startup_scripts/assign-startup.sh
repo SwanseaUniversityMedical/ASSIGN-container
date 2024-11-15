@@ -30,8 +30,21 @@ $ydb_dist/mupip set -journal=off -region DEFAULT && \
 $ydb_dist/mupip set -extension_count=500000 -region DEFAULT && \
 $ydb_dist/mupip set -access_method=mm -region DEFAULT
 
+# Set the ybd env var for the TLS password hash, this can be replaced with an ENV var in the image?
+export ydb_tls_passwd_dev="$($ydb_dist/plugin/ydbcrypt/maskpass <<< $cert_pass | cut -d ":" -f2 | tr -d ' ')"
+
 # Startup webgui
 yottadb -run %ydbgui --read --port 9080 >>/data/logs/%ydbgui.log &
+
+# Startup the ASSIGN TLS listener
+yottadb -run %XCMD 'job START^VPRJREQ(9081)' &
+
+# Startup the ASSIGN web API interface
+mv /data/ADDWEBAUTH.m $ydb_dir/$ydb_rel/r/ADDWEBAUTH.m
+yottadb -run INT^VUE
+yottadb -run SETUP^UPRNHOOK2
+yottadb -run ^NEL
+yottadb -run ^ADDWEBAUTH
 
 # Drop in to ydb
 exec $ydb_dist/yottadb -direct

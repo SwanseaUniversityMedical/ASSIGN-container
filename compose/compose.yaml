@@ -1,0 +1,7 @@
+services:
+  web:
+    image: assign-container:latest
+    ports:
+      - "9080:9080"
+      - "9081:9081"
+    tty: true
