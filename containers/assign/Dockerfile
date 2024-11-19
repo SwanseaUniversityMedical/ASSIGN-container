@@ -1,8 +1,8 @@
-FROM yottadb/yottadb-base
+FROM yottadb/yottadb:r2.01
 
 LABEL org.opencontainers.image.source=https://github.com/SwanseaUniversityMedical/ASSIGN-container
 
-USER root
+#USER root
 SHELL ["/bin/bash", "-c"]
 
 # Get git.
@@ -25,8 +25,8 @@ RUN apt-get update && \
 # Placeholder for testing only
 ENV USER=root
 ENV cert_pass="monkey1234"
-# Placeholder for testing only
 ENV cert_subj="/C=US/ST=Washington/L=Seattle/CN=www.smh101.com"
+
 ENV cert_dir="/data/certs"
 
 RUN mkdir -p $cert_dir &&\

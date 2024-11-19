@@ -1,7 +1,12 @@
 services:
-  web:
-    image: assign-container:latest
+  db:
+    image: assign-container:pr-8
     ports:
       - "9080:9080"
       - "9081:9081"
-    tty: true
+    volumes:
+      - type: volume
+        source: db-data
+        target: /data/ABP
+volumes:
+  db-data:
