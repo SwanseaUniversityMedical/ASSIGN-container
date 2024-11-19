@@ -1,6 +1,6 @@
 services:
   db:
-    image: assign-container:pr-8
+    image: assign-container:latest
     ports:
       - "9080:9080"
       - "9081:9081"
