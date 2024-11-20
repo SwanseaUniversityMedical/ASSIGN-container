@@ -34,7 +34,6 @@ RUN apt-get update && \
 ENV USER=root
 ENV cert_pass="monkey1234"
 ENV cert_subj="/C=US/ST=Washington/L=Seattle/CN=www.smh101.com"
-
 ENV cert_dir="/data/certs"
 
 RUN mkdir -p $cert_dir &&\
