@@ -1,4 +1,6 @@
-FROM yottadb/yottadb:r2.01
+ARG YDB_VERSION="r2.01"
+
+FROM yottadb/yottadb:${YDB_VERSION}
 
 LABEL org.opencontainers.image.source=https://github.com/SwanseaUniversityMedical/ASSIGN-container
 
@@ -8,11 +10,17 @@ SHELL ["/bin/bash", "-c"]
 # Get git.
 RUN apt-get update && apt-get install -y git
 
+# ASSIGN install env vars
 ENV assign_url="https://github.com/endeavourhealth-discovery/ASSIGN.git"
 ENV assign_dest="/data/ASSIGN"
 ENV assign_sha=""
 ENV abp_dir="/data/ABP"
-ENV ydb_chset=M
+
+# YDB env vars
+ARG YDB_VERSION
+ENV ydb_chset="M"
+ENV ydb_dir="/data"
+ENV ydb_rel="${YDB_VERSION}_x86_64"
 
 # Create directory to hold ABP
 RUN mkdir -p $abp_dir
@@ -39,8 +47,11 @@ ENV ydb_crypt_config="$cert_dir/ydb_crypt_config.libconfig"
 
 # Add in startup script.
 COPY startup_scripts/assign-startup.sh /assign-startup.sh
-COPY startup_scripts/ADDWEBAUTH.m /data/ADDWEBAUTH.m
 RUN chmod +x /assign-startup.sh
+
+# Add in web auth
+COPY startup_scripts/ADDWEBAUTH.m /tmp/ADDWEBAUTH.m
+RUN chmod 644 /tmp/ADDWEBAUTH.m
 
 # Expose port for YottaDB GUI
 EXPOSE 9080
