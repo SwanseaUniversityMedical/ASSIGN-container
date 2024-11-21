@@ -22,8 +22,11 @@ if [ ! -d "$assign_dest" ]; then
   echo "Obtaining ASSIGN routines."
 
   # Clone the wanted sha from github
-  git clone $assign_url $assign_dest
-  git -C $assign_dest checkout $assign_sha
+    if [ -z "${assign_sha}" ]; then
+      git clone $assign_url $assign_dest --depth 1
+    else
+      git clone $assign_url $assign_dest --depth 1 --branch $assign_sha
+    fi
 
   # Put the routines to the YottaDB routines directory
   echo "Moving the routines."
@@ -44,16 +47,36 @@ $ydb_dist/mupip set -extension_count=500000 -region DEFAULT && \
 $ydb_dist/mupip set -journal=off -region DEFAULT #&& \
 #$ydb_dist/mupip set -access_method=mm -region DEFAULT
 
+# Do data ingest, look at checksum for "$ydb_dir/$ydb_rel/g/yottadb.gld"
+export checksum_loc=/data/import_checksum
+if [ ! -f "/data/import_checksum" ]; then
+  echo "Ingesting ABP from $abp_dir"
+  $ydb_dist/ydb -run %XCMD 'd IMPORT^UPRN1A("/data/ABP")'
+  echo "Producing checksum for $ydb_gbldir"
+  sha256sum $ydb_gbldir | awk '{ print $1 }' > $checksum_loc
+  cat /data/import_checksum
+else
+  echo "Get checksums"
+  prev_checksum=$(cat $checksum_loc)
+  cur_checksum=$(shasum -a 256 $ydb_gbldir | awk '{ print $1 }')
+  echo "Previous checksum: $prev_checksum"
+  echo "Current checksum: $cur_checksum"
+  if [[ $prev_checksum != $cur_checksum ]]; then
+    echo "Reproducing checksum for $ydb_gbldir"
+    sha256sum $ydb_gbldir | awk '{ print $1 }' > $checksum_loc
+  fi
+fi
+
 # Set the ybd env var for the TLS password hash, this can be replaced with an ENV var in the image?
-export ydb_tls_passwd_dev="$($ydb_dist/plugin/ydbcrypt/maskpass <<< $cert_pass | cut -d ":" -f2 | tr -d ' ')"
+#export ydb_tls_passwd_dev="$($ydb_dist/plugin/ydbcrypt/maskpass <<< $cert_pass | cut -d ":" -f2 | tr -d ' ')"
 
 # Startup the ASSIGN TLS listener
-echo "Starting TLS listener"
+echo "Starting listener"
 yottadb -run %XCMD 'job START^VPRJREQ(9081)' &
 
 # Startup the ASSIGN web API interface
 echo "Starting ASSIGN API endpoints"
-cp "/tmp/ADDWEBAUTH.m" "$ydb_dir/$ydb_rel/r/ADDWEBAUTH.m"
+cp "/extra_scripts/ADDWEBAUTH.m" "$ydb_dir/$ydb_rel/r/ADDWEBAUTH.m"
 yottadb -run INT^VUE          # File upload/download
 yottadb -run SETUP^UPRNHOOK2  # UPRN retrieval
 yottadb -run ^NEL             # request handling

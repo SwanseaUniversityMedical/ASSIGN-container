@@ -32,25 +32,25 @@ RUN apt-get update && \
 
 # Placeholder for testing only
 ENV USER=root
-ENV cert_pass="monkey1234"
-ENV cert_subj="/C=US/ST=Washington/L=Seattle/CN=www.smh101.com"
-ENV cert_dir="/data/certs"
+#ENV cert_pass="monkey1234"
+#ENV cert_subj="/C=US/ST=Washington/L=Seattle/CN=www.smh101.com"
+#ENV cert_dir="/data/certs"
 
-RUN mkdir -p $cert_dir &&\
-    openssl genrsa -aes128 -passout pass:$cert_pass -out $cert_dir/mycert.key 2048 && \
-    openssl req -new -key $cert_dir/mycert.key -passin pass:$cert_pass -subj $cert_subj -out $cert_dir/mycert.csr && \
-    openssl req -x509 -days 365 -sha256 -in $cert_dir/mycert.csr -key $cert_dir/mycert.key -passin pass:$cert_pass -out $cert_dir/mycert.pem
+#RUN mkdir -p $cert_dir &&\
+#    openssl genrsa -aes128 -passout pass:$cert_pass -out $cert_dir/mycert.key 2048 && \
+#    openssl req -new -key $cert_dir/mycert.key -passin pass:$cert_pass -subj $cert_subj -out $cert_dir/mycert.csr && \
+#    openssl req -x509 -days 365 -sha256 -in $cert_dir/mycert.csr -key $cert_dir/mycert.key -passin pass:$cert_pass -out $cert_dir/mycert.pem
 
-COPY certs/ydb_crypt_config.libconfig $cert_dir/ydb_crypt_config.libconfig
-ENV ydb_crypt_config="$cert_dir/ydb_crypt_config.libconfig"
+#COPY certs/ydb_crypt_config.libconfig $cert_dir/ydb_crypt_config.libconfig
+#ENV ydb_crypt_config="$cert_dir/ydb_crypt_config.libconfig"
 
 # Add in startup script.
 COPY startup_scripts/assign-startup.sh /assign-startup.sh
 RUN chmod +x /assign-startup.sh
 
 # Add in web auth
-COPY startup_scripts/ADDWEBAUTH.m /tmp/ADDWEBAUTH.m
-RUN chmod 644 /tmp/ADDWEBAUTH.m
+COPY startup_scripts/ADDWEBAUTH.m /extra_scripts/ADDWEBAUTH.m
+RUN chmod 644 /extra_scripts/ADDWEBAUTH.m
 
 # Expose port for YottaDB GUI
 EXPOSE 9080
