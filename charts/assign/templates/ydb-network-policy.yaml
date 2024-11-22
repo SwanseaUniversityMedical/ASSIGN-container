@@ -4,6 +4,28 @@ kind: NetworkPolicy
 metadata:
   name: ydb
 
+  annotations:
+    assign.ukserp.ac.uk/component: "ydb"
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.networkPolicy.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+  labels:
+    component: ydb
+    app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+    chart: {{ include "assign.labels.chart" . }}
+    heritage: {{ .Release.Service }}
+    {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.networkPolicy.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
 spec:
   podSelector:
     matchLabels:

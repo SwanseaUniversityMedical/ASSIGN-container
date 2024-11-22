@@ -99,6 +99,10 @@ ingress:
 networkPolicy:
   # Create a NetworkPolicy which only allows the ydb pods to be contacted via the ingress
   enabled: true
+  # Annotations and labels specific to the network policy
+  annotations: {}
+  labels: {}
+
   ingress:
     # Pod labels to match the ingress controller pods already running on the cluster
     matchLabels:
