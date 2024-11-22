@@ -13,12 +13,10 @@ ydb:
       value: "debug"
 
   persistence:
-    enabled: true
     storageClassName: ceph-filesystem
     capacity: 1Gi
 
 ingress:
-  enabled: true
   annotations:
     cert-manager.io/cluster-issuer: "ca-issuer"
   ingressClassName: "nginx-hiru"
@@ -28,7 +26,6 @@ ingress:
     secretName: assign-tls-secret
 
 networkPolicy:
-  enabled: true
   ingress:
     matchLabels:
       app.kubernetes.io/name: ingress-nginx
